@@ -1,6 +1,7 @@
-"eslintConfig": {
-    "globals": {
-        "netmera": true
+{
+    "eslintConfig": {
+        "globals": {
+            "netmera": true
+        }
     }
 }
- //  If you use react or vue, add your code on your project package.json file.
