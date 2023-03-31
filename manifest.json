@@ -1,6 +1,6 @@
 {
-  "name": "Inomera",
-  "short_name": "OzanApp",
-  "gcm_sender_id": "359824561280", 
+  "name": "OzanTestApp",
+  "short_name": "OzanTestApp",
+  "gcm_sender_id": "150523657247", 
   "gcm_user_visible_only": true
 }
