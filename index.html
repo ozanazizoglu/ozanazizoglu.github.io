@@ -1,48 +1,84 @@
 <!DOCTYPE html>
-    <html>
-        <head>
-            <script src="https://feedbackbutton.io/script.js" data-token="163566037488122134" defer></script>
-            <!-- Hotjar Tracking Code for my site -->
-            <script>
-                (function(h,o,t,j,a,r){
-                    h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                    h._hjSettings={hjid:3427114,hjsv:6};
-                    a=o.getElementsByTagName('head')[0];
-                    r=o.createElement('script');r.async=1;
-                    r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                    a.appendChild(r);
-                })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-            </script>
-            <script>var netmera = netmera || [];</script>
-            <script src='//cdn.netmera-web.com/wsdkjs/f9evjopmRL9f5dPzq3xdssS-1gnvYRMntmrIrF5b28cyYUNMIn4pyQ' async></script>
-            <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 200px;
+        }
+        button {
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tax Calculator</h1>
+    <form id="taxForm">
+        <label for="planPrice">Monthly price of your plan:</label>
+        <input type="number" id="planPrice" step="0.01" required>
 
-        </head>
-        <body>
-            <h1>Hello World</h1>
-            <p>I'm hosted with GitHub Pages and created by AOA.</p>
-            <script type="module">
-                // Import the functions you need from the SDKs you need
-                import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
-                import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-analytics.js";
-                // TODO: Add SDKs for Firebase products that you want to use
-                // https://firebase.google.com/docs/web/setup#available-libraries
-              
-                // Your web app's Firebase configuration
-                // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-                const firebaseConfig = {
-                  apiKey: "AIzaSyBSK4txb3b3-OZ9sLY-Lli4keTYGiEH1OU",
-                  authDomain: "netmeraintegration.firebaseapp.com",
-                  projectId: "netmeraintegration",
-                  storageBucket: "netmeraintegration.appspot.com",
-                  messagingSenderId: "150523657247",
-                  appId: "1:150523657247:web:af5bdb5ec2b8f9738b692a",
-                  measurementId: "G-HTSXTW83CV"
-                };
-              
-                // Initialize Firebase
-                const app = initializeApp(firebaseConfig);
-                const analytics = getAnalytics(app);
-              </script>
-        </body>
-    </html>
+        <label for="devicePrice">Monthly price of your device:</label>
+        <input type="number" id="devicePrice" step="0.01" required>
+
+        <label for="takeBackCredit">Take-back credit:</label>
+        <input type="number" id="takeBackCredit" step="0.01" required>
+
+        <button type="button" onclick="calculateTaxes()">Calculate Taxes</button>
+    </form>
+
+    <div class="result">
+        <h2>Results</h2>
+        <p>GST (Quebec): <span id="gstQuebec">-</span></p>
+        <p>QST (Quebec): <span id="qstQuebec">-</span></p>
+        <p>HST (Ontario): <span id="hstOntario">-</span></p>
+    </div>
+
+    <script>
+        function calculateTaxes() {
+            // Tax rates
+            const gstRateQuebec = 0.05; // GST for Quebec
+            const qstRateQuebec = 0.09975; // QST for Quebec
+            const hstRateOntario = 0.13; // HST for Ontario
+
+            // Input values
+            const planPrice = parseFloat(document.getElementById('planPrice').value);
+            const devicePrice = parseFloat(document.getElementById('devicePrice').value);
+            const takeBackCredit = parseFloat(document.getElementById('takeBackCredit').value);
+
+            if (isNaN(planPrice) || isNaN(devicePrice) || isNaN(takeBackCredit)) {
+                alert("Please enter valid numbers for all fields.");
+                return;
+            }
+
+            // Calculation
+            const monthlyTotal = planPrice + devicePrice + takeBackCredit / 24;
+
+            const gstQuebec = monthlyTotal * gstRateQuebec;
+            const qstQuebec = monthlyTotal * qstRateQuebec;
+            const hstOntario = monthlyTotal * hstRateOntario;
+
+            // Display results
+            document.getElementById('gstQuebec').textContent = gstQuebec.toFixed(2);
+            document.getElementById('qstQuebec').textContent = qstQuebec.toFixed(2);
+            document.getElementById('hstOntario').textContent = hstOntario.toFixed(2);
+        }
+    </script>
+</body>
+</html>
