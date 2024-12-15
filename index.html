@@ -26,9 +26,20 @@
         .result {
             margin-top: 20px;
         }
+        /* Canadian flag styles */
+        .flag {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            width: 100px;
+        }
     </style>
 </head>
 <body>
+    <!-- Canadian Flag -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada_%28Pantone%29.svg" alt="Canadian Flag" class="flag">
+
     <h1>Tax Calculator</h1>
     <form id="taxForm">
         <label for="planPrice">Monthly price of your plan:</label>
