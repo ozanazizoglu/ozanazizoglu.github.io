@@ -63,13 +63,19 @@
         <div class="result hidden mt-6 bg-gray-50 p-4 rounded-lg shadow-md" id="resultSection">
             <h2 class="text-xl font-semibold text-gray-700 mb-4">Results</h2>
             <p class="text-gray-700"><strong>Subtotal:</strong> <span id="subtotal">-</span></p>
-            <p class="text-gray-700"><strong>Total:</strong> <span id="total">-</span></p>
+            <p class="text-gray-700"><strong>Taxes:</strong></p>
+            <ul class="list-disc list-inside text-gray-700">
+                <li>GST: <span id="gst">-</span></li>
+                <li>QST: <span id="qst">-</span></li>
+                <li>HST: <span id="hst">-</span></li>
+            </ul>
+            <p class="text-gray-700 mt-2"><strong>Total:</strong> <span id="total">-</span></p>
         </div>
     </div>
 
     <!-- Footer -->
     <footer class="mt-8 text-center text-sm text-gray-600">
-        Made by <span class="font-semibold text-gray-800">Ozan Azizoğlu</span>
+        Made by <a href="https://www.linkedin.com/in/aziz-ozan-azizoglu/" target="_blank" class="font-semibold text-purple-600 hover:underline">Ozan Azizoğlu</a>
     </footer>
 
     <script>
@@ -96,24 +102,24 @@
             const monthlyTotalPlan = planPrice;
             const monthlyTotalDevice = devicePrice + takeBackCredit / 24;
 
-            let gstQuebec = 0, qstQuebec = 0, hstOntario = 0;
+            let gst = 0, qst = 0, hst = 0;
 
             // Apply taxes based on provinces
             if (planProvince === 'qc') {
-                gstQuebec += monthlyTotalPlan * gstRateQuebec;
-                qstQuebec += monthlyTotalPlan * qstRateQuebec;
+                gst += monthlyTotalPlan * gstRateQuebec;
+                qst += monthlyTotalPlan * qstRateQuebec;
             } else if (planProvince === 'on') {
-                hstOntario += monthlyTotalPlan * hstRateOntario;
+                hst += monthlyTotalPlan * hstRateOntario;
             }
 
             if (deviceProvince === 'qc') {
-                gstQuebec += monthlyTotalDevice * gstRateQuebec;
-                qstQuebec += monthlyTotalDevice * qstRateQuebec;
+                gst += monthlyTotalDevice * gstRateQuebec;
+                qst += monthlyTotalDevice * qstRateQuebec;
             } else if (deviceProvince === 'on') {
-                hstOntario += monthlyTotalDevice * hstRateOntario;
+                hst += monthlyTotalDevice * hstRateOntario;
             }
 
-            const totalTaxes = gstQuebec + qstQuebec + hstOntario;
+            const totalTaxes = gst + qst + hst;
             const total = subtotal + totalTaxes;
 
             // Show results section
@@ -122,6 +128,9 @@
 
             // Update results
             document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('gst').textContent = gst.toFixed(2);
+            document.getElementById('qst').textContent = qst.toFixed(2);
+            document.getElementById('hst').textContent = hst.toFixed(2);
             document.getElementById('total').textContent = total.toFixed(2);
         }
     </script>
