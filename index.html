@@ -3,31 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tax Calculator</title>
+    <title>Enhanced Tax Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background: linear-gradient(to right, #74ebd5, #acb6e5);
+            color: #333;
         }
+
+        h1 {
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: slideIn 1s ease-out;
+        }
+
         label {
             display: block;
             margin-top: 10px;
+            font-weight: bold;
         }
-        input, select {
-            padding: 5px;
+
+        input, select, button {
+            padding: 10px;
             margin-bottom: 10px;
-            width: 200px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
+
         button {
-            padding: 5px 10px;
-            margin-top: 10px;
+            background: #74ebd5;
+            border: none;
+            color: white;
+            font-weight: bold;
             cursor: pointer;
+            transition: background 0.3s ease;
         }
+
+        button:hover {
+            background: #56c6c6;
+        }
+
         .result {
             margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease;
         }
+
         .hidden {
             display: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
