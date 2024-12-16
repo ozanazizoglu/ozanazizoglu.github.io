@@ -29,20 +29,9 @@
         .hidden {
             display: none;
         }
-        /* Canadian flag styles */
-        .flag {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            width: 100px;
-        }
     </style>
 </head>
 <body>
-    <!-- Canadian Flag -->
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada_%28Pantone%29.svg" alt="Canadian Flag" class="flag">
-
     <h1>Tax Calculator</h1>
     <form id="taxForm">
         <!-- Plan Details -->
@@ -71,7 +60,7 @@
         <button type="button" onclick="calculateTaxes()">Calculate Taxes</button>
     </form>
 
-    <div class="result">
+    <div class="result hidden" id="resultSection">
         <h2>Results</h2>
         <p>Subtotal: <span id="subtotal">-</span></p>
         <div id="taxesQuebec" class="hidden">
@@ -131,6 +120,10 @@
 
             const totalQuebec = subtotal + totalTaxQuebec;
             const totalOntario = subtotal + totalTaxOntario;
+
+            // Show results section
+            const resultSection = document.getElementById('resultSection');
+            resultSection.classList.remove('hidden');
 
             // Update results
             document.getElementById('subtotal').textContent = subtotal.toFixed(2);
