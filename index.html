@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Tax Calculator</title>
+    <title>Tax Calculator</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Tailwind plugin for animations (if needed) */
         @layer utilities {
-            .animate-slide-down {
-                animation: slide-down 0.5s ease-out forwards;
-            }
             @keyframes slide-down {
                 from {
                     opacity: 0;
@@ -22,9 +19,8 @@
                     transform: translateY(0);
                 }
             }
-
-            .hover-skew {
-                background: linear-gradient(135deg, rgba(255, 0, 0, 0.5), rgba(255, 255, 255, 0));
+            .animate-slide-down {
+                animation: slide-down 0.5s ease-out forwards;
             }
         }
     </style>
@@ -69,8 +65,10 @@
                     class="w-full border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
 
+            <!-- Button -->
             <button type="button" onclick="calculateTaxes()"
-                class="relative w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-transform duration-300 hover:skew-y-6 hover-skew">
+                class="relative w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-300 hover:bg-cover hover:bg-center hover:text-transparent"
+                style="background-image: none; hover:bg-image: url('https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada_%28Pantone%29.svg');">
                 Calculate Taxes
             </button>
         </form>
