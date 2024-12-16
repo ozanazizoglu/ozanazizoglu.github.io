@@ -97,29 +97,30 @@
                 return;
             }
 
-            // Calculations
+            // Subtotal
             const subtotal = planPrice + devicePrice;
-            const monthlyTotalPlan = planPrice;
-            const monthlyTotalDevice = devicePrice + takeBackCredit / 24;
 
+            // Calculate taxes
+            const monthlyTotal = subtotal + takeBackCredit / 24;
             let gst = 0, qst = 0, hst = 0;
 
-            // Apply taxes based on provinces
             if (planProvince === 'qc') {
-                gst += monthlyTotalPlan * gstRateQuebec;
-                qst += monthlyTotalPlan * qstRateQuebec;
+                gst += planPrice * gstRateQuebec;
+                qst += planPrice * qstRateQuebec;
             } else if (planProvince === 'on') {
-                hst += monthlyTotalPlan * hstRateOntario;
+                hst += planPrice * hstRateOntario;
             }
 
             if (deviceProvince === 'qc') {
-                gst += monthlyTotalDevice * gstRateQuebec;
-                qst += monthlyTotalDevice * qstRateQuebec;
+                gst += devicePrice * gstRateQuebec;
+                qst += devicePrice * qstRateQuebec;
             } else if (deviceProvince === 'on') {
-                hst += monthlyTotalDevice * hstRateOntario;
+                hst += devicePrice * hstRateOntario;
             }
 
             const totalTaxes = gst + qst + hst;
+
+            // Total = Subtotal + Taxes
             const total = subtotal + totalTaxes;
 
             // Show results section
