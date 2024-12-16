@@ -100,34 +100,35 @@
             // Subtotal
             const subtotal = planPrice + devicePrice;
 
-            // Calculate taxes
-            const monthlyTotal = subtotal + takeBackCredit / 24;
+            // Taxable amount
+            const taxableAmount = planPrice + devicePrice + takeBackCredit / 24;
+
+            // Taxes
             let gst = 0, qst = 0, hst = 0;
 
             if (planProvince === 'qc') {
-                gst += planPrice * gstRateQuebec;
-                qst += planPrice * qstRateQuebec;
+                gst += taxableAmount * gstRateQuebec;
+                qst += taxableAmount * qstRateQuebec;
             } else if (planProvince === 'on') {
-                hst += planPrice * hstRateOntario;
+                hst += taxableAmount * hstRateOntario;
             }
 
             if (deviceProvince === 'qc') {
-                gst += devicePrice * gstRateQuebec;
-                qst += devicePrice * qstRateQuebec;
+                gst += taxableAmount * gstRateQuebec;
+                qst += taxableAmount * qstRateQuebec;
             } else if (deviceProvince === 'on') {
-                hst += devicePrice * hstRateOntario;
+                hst += taxableAmount * hstRateOntario;
             }
 
             const totalTaxes = gst + qst + hst;
 
-            // Total = Subtotal + Taxes
+            // Total
             const total = subtotal + totalTaxes;
 
-            // Show results section
+            // Show results
             const resultSection = document.getElementById('resultSection');
             resultSection.classList.remove('hidden');
 
-            // Update results
             document.getElementById('subtotal').textContent = subtotal.toFixed(2);
             document.getElementById('gst').textContent = gst.toFixed(2);
             document.getElementById('qst').textContent = qst.toFixed(2);
