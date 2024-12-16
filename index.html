@@ -15,11 +15,11 @@
             <!-- Plan Details -->
             <div>
                 <label for="planPrice" class="block text-gray-700 font-medium">Monthly price of your plan:</label>
-                <input type="number" id="planPrice" step="0.01" required class="w-full p-2 border rounded">
+                <input type="number" id="planPrice" step="0.01" value="50" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
             </div>
             <div>
                 <label for="planProvince" class="block text-gray-700 font-medium">Select province for plan:</label>
-                <select id="planProvince" class="w-full p-2 border rounded">
+                <select id="planProvince" class="w-full p-2 border rounded" onchange="calculateTaxes()">
                     <option value="qc">Quebec</option>
                     <option value="on">Ontario</option>
                 </select>
@@ -28,51 +28,42 @@
             <!-- Device Details -->
             <div>
                 <label for="devicePrice" class="block text-gray-700 font-medium">Monthly price of your device:</label>
-                <input type="number" id="devicePrice" step="0.01" required class="w-full p-2 border rounded">
+                <input type="number" id="devicePrice" step="0.01" value="50" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
             </div>
             <div>
                 <label for="deviceProvince" class="block text-gray-700 font-medium">Select province for device:</label>
-                <select id="deviceProvince" class="w-full p-2 border rounded">
+                <select id="deviceProvince" class="w-full p-2 border rounded" onchange="calculateTaxes()">
                     <option value="qc">Quebec</option>
                     <option value="on">Ontario</option>
                 </select>
             </div>
             <div>
                 <label for="takeBackCredit" class="block text-gray-700 font-medium">Take-back credit:</label>
-                <input type="number" id="takeBackCredit" step="0.01" required class="w-full p-2 border rounded">
+                <input type="number" id="takeBackCredit" step="0.01" value="200" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
             </div>
-
-            <!-- Calculate Button -->
-            <button type="button" onclick="calculateTaxes()" class="w-full bg-purple-500 text-white p-2 rounded hover:bg-purple-600">
-                Calculate Taxes
-            </button>
         </form>
 
         <!-- Results -->
-        <div id="results" class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow">
+        <div id="results" class="mt-6 bg-gray-50 p-4 rounded-lg shadow">
             <h2 class="text-lg font-semibold mb-4">Results</h2>
-            <p><strong>Subtotal:</strong> <span id="subtotal"></span> CAD</p>
-            <p><strong>Taxes:</strong> <span id="taxes"></span> CAD</p>
-            <p class="mt-2 font-bold"><strong>Total:</strong> <span id="total"></span> CAD</p>
+            <p><strong>Subtotal:</strong> <span id="subtotal">0.00</span> CAD</p>
+            <p><strong>Taxes:</strong> <span id="taxes">0.00</span> CAD</p>
+            <p class="mt-2 font-bold"><strong>Total:</strong> <span id="total">0.00</span> CAD</p>
         </div>
     </div>
 
     <script>
         function calculateTaxes() {
-            const gstRate = 0.05; // GST
-            const qstRate = 0.09975; // QST
-            const hstRate = 0.13; // HST
+            const gstRate = 0.05;     // GST
+            const qstRate = 0.09975;  // QST
+            const hstRate = 0.13;     // HST
 
-            const planPrice = parseFloat(document.getElementById('planPrice').value);
-            const devicePrice = parseFloat(document.getElementById('devicePrice').value);
-            const takeBackCredit = parseFloat(document.getElementById('takeBackCredit').value);
+            // Input values
+            const planPrice = parseFloat(document.getElementById('planPrice').value) || 0;
+            const devicePrice = parseFloat(document.getElementById('devicePrice').value) || 0;
+            const takeBackCredit = parseFloat(document.getElementById('takeBackCredit').value) || 0;
             const planProvince = document.getElementById('planProvince').value;
             const deviceProvince = document.getElementById('deviceProvince').value;
-
-            if (isNaN(planPrice) || isNaN(devicePrice) || isNaN(takeBackCredit)) {
-                alert("Please enter valid numbers for all fields.");
-                return;
-            }
 
             // Subtotal
             const subtotal = planPrice + devicePrice;
@@ -105,9 +96,10 @@
             document.getElementById('subtotal').textContent = subtotal.toFixed(2);
             document.getElementById('taxes').textContent = totalTaxes.toFixed(2);
             document.getElementById('total').textContent = total.toFixed(2);
-
-            document.getElementById('results').classList.remove('hidden');
         }
+
+        // Initial Calculation on Page Load
+        window.onload = calculateTaxes;
     </script>
 </body>
 </html>
