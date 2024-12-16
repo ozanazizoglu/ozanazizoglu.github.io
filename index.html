@@ -6,24 +6,6 @@
     <title>Tax Calculator</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Tailwind plugin for animations (if needed) */
-        @layer utilities {
-            @keyframes slide-down {
-                from {
-                    opacity: 0;
-                    transform: translateY(-20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-            .animate-slide-down {
-                animation: slide-down 0.5s ease-out forwards;
-            }
-        }
-    </style>
 </head>
 <body class="bg-gradient-to-r from-blue-300 to-purple-300 min-h-screen flex items-center justify-center">
     <div class="bg-white p-8 rounded-lg shadow-md max-w-lg w-full">
@@ -65,12 +47,15 @@
                     class="w-full border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
 
-            <!-- Button -->
-            <button type="button" onclick="calculateTaxes()"
-                class="relative w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-300 hover:bg-cover hover:bg-center hover:text-transparent"
-                style="background-image: none; hover:bg-image: url('https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada_%28Pantone%29.svg');">
-                Calculate Taxes
-            </button>
+            <!-- Updated Button -->
+            <a href="#_" onclick="calculateTaxes()" 
+                class="relative inline-flex items-center justify-center p-4 px-6 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out border-2 border-purple-500 rounded-full shadow-md group">
+                <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-purple-500 group-hover:translate-x-0 ease">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </span>
+                <span class="absolute flex items-center justify-center w-full h-full text-purple-500 transition-all duration-300 transform group-hover:translate-x-full ease">Calculate Taxes</span>
+                <span class="relative invisible">Calculate Taxes</span>
+            </a>
         </form>
 
         <div class="result hidden mt-6 bg-gray-50 p-4 rounded-lg shadow-md animate-slide-down" id="resultSection">
