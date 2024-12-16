@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tax Calculator</title>
+    <title>Dynamic Tax Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex flex-col justify-center items-center min-h-screen">
@@ -12,11 +12,12 @@
 
         <!-- Input Form -->
         <form class="space-y-4">
-            <!-- Plan Details -->
+            <!-- Plan Price -->
             <div>
                 <label for="planPrice" class="block text-gray-700 font-medium">Monthly price of your plan:</label>
-                <input type="number" id="planPrice" step="0.01" value="50" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
+                <input type="number" id="planPrice" step="0.01" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
             </div>
+            <!-- Plan Province -->
             <div>
                 <label for="planProvince" class="block text-gray-700 font-medium">Select province for plan:</label>
                 <select id="planProvince" class="w-full p-2 border rounded" onchange="calculateTaxes()">
@@ -24,12 +25,12 @@
                     <option value="on">Ontario</option>
                 </select>
             </div>
-
-            <!-- Device Details -->
+            <!-- Device Price -->
             <div>
                 <label for="devicePrice" class="block text-gray-700 font-medium">Monthly price of your device:</label>
-                <input type="number" id="devicePrice" step="0.01" value="50" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
+                <input type="number" id="devicePrice" step="0.01" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
             </div>
+            <!-- Device Province -->
             <div>
                 <label for="deviceProvince" class="block text-gray-700 font-medium">Select province for device:</label>
                 <select id="deviceProvince" class="w-full p-2 border rounded" onchange="calculateTaxes()">
@@ -37,69 +38,77 @@
                     <option value="on">Ontario</option>
                 </select>
             </div>
+            <!-- Take-back Credit -->
             <div>
                 <label for="takeBackCredit" class="block text-gray-700 font-medium">Take-back credit:</label>
-                <input type="number" id="takeBackCredit" step="0.01" value="200" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
+                <input type="number" id="takeBackCredit" step="0.01" required class="w-full p-2 border rounded" oninput="calculateTaxes()">
             </div>
         </form>
 
         <!-- Results -->
-        <div id="results" class="mt-6 bg-gray-50 p-4 rounded-lg shadow">
+        <div id="results" class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow">
             <h2 class="text-lg font-semibold mb-4">Results</h2>
             <p><strong>Subtotal:</strong> <span id="subtotal">0.00</span> CAD</p>
-            <p><strong>Taxes:</strong> <span id="taxes">0.00</span> CAD</p>
-            <p class="mt-2 font-bold"><strong>Total:</strong> <span id="total">0.00</span> CAD</p>
+            <p><strong>GST:</strong> <span id="gst">0.00</span> CAD</p>
+            <p><strong>QST:</strong> <span id="qst">0.00</span> CAD</p>
+            <p><strong>HST:</strong> <span id="hst">0.00</span> CAD</p>
+            <hr class="my-2">
+            <p class="text-lg font-bold"><strong>Total:</strong> <span id="total">0.00</span> CAD</p>
         </div>
     </div>
 
+    <!-- Script -->
     <script>
         function calculateTaxes() {
-            const gstRate = 0.05;     // GST
-            const qstRate = 0.09975;  // QST
-            const hstRate = 0.13;     // HST
+            const gstRate = 0.05;     // GST Rate
+            const qstRate = 0.09975;  // QST Rate
+            const hstRate = 0.13;     // HST Rate
 
-            // Input values
-            const planPrice = parseFloat(document.getElementById('planPrice').value) || 0;
-            const devicePrice = parseFloat(document.getElementById('devicePrice').value) || 0;
-            const takeBackCredit = parseFloat(document.getElementById('takeBackCredit').value) || 0;
-            const planProvince = document.getElementById('planProvince').value;
-            const deviceProvince = document.getElementById('deviceProvince').value;
+            // Inputs
+            const planPrice = parseFloat(document.getElementById("planPrice").value) || 0;
+            const devicePrice = parseFloat(document.getElementById("devicePrice").value) || 0;
+            const takeBackCredit = parseFloat(document.getElementById("takeBackCredit").value) || 0;
+            const planProvince = document.getElementById("planProvince").value;
+            const deviceProvince = document.getElementById("deviceProvince").value;
 
             // Subtotal
             const subtotal = planPrice + devicePrice;
 
             // Taxes
-            let planTax = 0, deviceTax = 0;
+            let gst = 0, qst = 0, hst = 0;
 
             // Plan Taxes
-            if (planProvince === 'qc') {
-                planTax = planPrice * (gstRate + qstRate);
-            } else if (planProvince === 'on') {
-                planTax = planPrice * hstRate;
+            if (planProvince === "qc") {
+                gst += planPrice * gstRate;
+                qst += planPrice * qstRate;
+            } else if (planProvince === "on") {
+                hst += planPrice * hstRate;
             }
 
             // Device Taxes
-            const deviceTaxableAmount = devicePrice + takeBackCredit / 24;
-            if (deviceProvince === 'qc') {
-                deviceTax = deviceTaxableAmount * (gstRate + qstRate);
-            } else if (deviceProvince === 'on') {
-                deviceTax = deviceTaxableAmount * hstRate;
+            const deviceTaxable = devicePrice + (takeBackCredit / 24);
+            if (deviceProvince === "qc") {
+                gst += deviceTaxable * gstRate;
+                qst += deviceTaxable * qstRate;
+            } else if (deviceProvince === "on") {
+                hst += deviceTaxable * hstRate;
             }
 
             // Total Taxes
-            const totalTaxes = planTax + deviceTax;
+            const totalTaxes = gst + qst + hst;
 
-            // Final Total
+            // Total
             const total = subtotal + totalTaxes;
 
             // Display Results
-            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
-            document.getElementById('taxes').textContent = totalTaxes.toFixed(2);
-            document.getElementById('total').textContent = total.toFixed(2);
-        }
+            document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+            document.getElementById("gst").textContent = gst.toFixed(2);
+            document.getElementById("qst").textContent = qst.toFixed(2);
+            document.getElementById("hst").textContent = hst.toFixed(2);
+            document.getElementById("total").textContent = total.toFixed(2);
 
-        // Initial Calculation on Page Load
-        window.onload = calculateTaxes;
+            document.getElementById("results").classList.remove("hidden");
+        }
     </script>
 </body>
 </html>
