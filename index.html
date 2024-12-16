@@ -26,6 +26,9 @@
         .result {
             margin-top: 20px;
         }
+        .hidden {
+            display: none;
+        }
         /* Canadian flag styles */
         .flag {
             position: fixed;
@@ -71,11 +74,15 @@
     <div class="result">
         <h2>Results</h2>
         <p>Subtotal: <span id="subtotal">-</span></p>
-        <p>GST (Quebec): <span id="gstQuebec">-</span></p>
-        <p>QST (Quebec): <span id="qstQuebec">-</span></p>
-        <p>Total (Quebec): <span id="totalQuebec">-</span></p>
-        <p>HST (Ontario): <span id="hstOntario">-</span></p>
-        <p>Total (Ontario): <span id="totalOntario">-</span></p>
+        <div id="taxesQuebec" class="hidden">
+            <p>GST (Quebec): <span id="gstQuebec">-</span></p>
+            <p>QST (Quebec): <span id="qstQuebec">-</span></p>
+            <p>Total (Quebec): <span id="totalQuebec">-</span></p>
+        </div>
+        <div id="taxesOntario" class="hidden">
+            <p>HST (Ontario): <span id="hstOntario">-</span></p>
+            <p>Total (Ontario): <span id="totalOntario">-</span></p>
+        </div>
     </div>
 
     <script>
@@ -125,13 +132,29 @@
             const totalQuebec = subtotal + totalTaxQuebec;
             const totalOntario = subtotal + totalTaxOntario;
 
-            // Display results
+            // Update results
             document.getElementById('subtotal').textContent = subtotal.toFixed(2);
-            document.getElementById('gstQuebec').textContent = gstQuebec.toFixed(2);
-            document.getElementById('qstQuebec').textContent = qstQuebec.toFixed(2);
-            document.getElementById('totalQuebec').textContent = totalQuebec.toFixed(2);
-            document.getElementById('hstOntario').textContent = hstOntario.toFixed(2);
-            document.getElementById('totalOntario').textContent = totalOntario.toFixed(2);
+
+            // Show or hide Quebec taxes
+            const taxesQuebec = document.getElementById('taxesQuebec');
+            if (gstQuebec > 0 || qstQuebec > 0) {
+                taxesQuebec.classList.remove('hidden');
+                document.getElementById('gstQuebec').textContent = gstQuebec.toFixed(2);
+                document.getElementById('qstQuebec').textContent = qstQuebec.toFixed(2);
+                document.getElementById('totalQuebec').textContent = totalQuebec.toFixed(2);
+            } else {
+                taxesQuebec.classList.add('hidden');
+            }
+
+            // Show or hide Ontario taxes
+            const taxesOntario = document.getElementById('taxesOntario');
+            if (hstOntario > 0) {
+                taxesOntario.classList.remove('hidden');
+                document.getElementById('hstOntario').textContent = hstOntario.toFixed(2);
+                document.getElementById('totalOntario').textContent = totalOntario.toFixed(2);
+            } else {
+                taxesOntario.classList.add('hidden');
+            }
         }
     </script>
 </body>
