@@ -13,7 +13,7 @@
             display: block;
             margin-top: 10px;
         }
-        input {
+        input, select {
             padding: 5px;
             margin-bottom: 10px;
             width: 200px;
@@ -42,11 +42,25 @@
 
     <h1>Tax Calculator</h1>
     <form id="taxForm">
+        <!-- Plan Details -->
         <label for="planPrice">Monthly price of your plan:</label>
         <input type="number" id="planPrice" step="0.01" required>
 
+        <label for="planProvince">Select province for plan:</label>
+        <select id="planProvince" required>
+            <option value="qc">Quebec</option>
+            <option value="on">Ontario</option>
+        </select>
+
+        <!-- Device Details -->
         <label for="devicePrice">Monthly price of your device:</label>
         <input type="number" id="devicePrice" step="0.01" required>
+
+        <label for="deviceProvince">Select province for device:</label>
+        <select id="deviceProvince" required>
+            <option value="qc">Quebec</option>
+            <option value="on">Ontario</option>
+        </select>
 
         <label for="takeBackCredit">Take-back credit:</label>
         <input type="number" id="takeBackCredit" step="0.01" required>
@@ -75,6 +89,8 @@
             const planPrice = parseFloat(document.getElementById('planPrice').value);
             const devicePrice = parseFloat(document.getElementById('devicePrice').value);
             const takeBackCredit = parseFloat(document.getElementById('takeBackCredit').value);
+            const planProvince = document.getElementById('planProvince').value;
+            const deviceProvince = document.getElementById('deviceProvince').value;
 
             if (isNaN(planPrice) || isNaN(devicePrice) || isNaN(takeBackCredit)) {
                 alert("Please enter valid numbers for all fields.");
@@ -83,11 +99,25 @@
 
             // Calculations
             const subtotal = planPrice + devicePrice;
-            const monthlyTotal = subtotal + takeBackCredit / 24;
+            const monthlyTotalPlan = planPrice;
+            const monthlyTotalDevice = devicePrice + takeBackCredit / 24;
 
-            const gstQuebec = monthlyTotal * gstRateQuebec;
-            const qstQuebec = monthlyTotal * qstRateQuebec;
-            const hstOntario = monthlyTotal * hstRateOntario;
+            let gstQuebec = 0, qstQuebec = 0, hstOntario = 0;
+
+            // Apply taxes based on provinces
+            if (planProvince === 'qc') {
+                gstQuebec += monthlyTotalPlan * gstRateQuebec;
+                qstQuebec += monthlyTotalPlan * qstRateQuebec;
+            } else if (planProvince === 'on') {
+                hstOntario += monthlyTotalPlan * hstRateOntario;
+            }
+
+            if (deviceProvince === 'qc') {
+                gstQuebec += monthlyTotalDevice * gstRateQuebec;
+                qstQuebec += monthlyTotalDevice * qstRateQuebec;
+            } else if (deviceProvince === 'on') {
+                hstOntario += monthlyTotalDevice * hstRateOntario;
+            }
 
             const totalTaxQuebec = gstQuebec + qstQuebec;
             const totalTaxOntario = hstOntario;
