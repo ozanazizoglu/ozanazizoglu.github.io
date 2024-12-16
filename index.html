@@ -81,9 +81,9 @@
     <script>
         function calculateTaxes() {
             // Tax rates
-            const gstRateQuebec = 0.05; // GST for Quebec
-            const qstRateQuebec = 0.09975; // QST for Quebec
-            const hstRateOntario = 0.13; // HST for Ontario
+            const gstRate = 0.05; // GST
+            const qstRate = 0.09975; // QST
+            const hstRate = 0.13; // HST
 
             // Input values
             const planPrice = parseFloat(document.getElementById('planPrice').value);
@@ -100,29 +100,30 @@
             // Subtotal
             const subtotal = planPrice + devicePrice;
 
-            // Taxable amount
+            // Taxable Amount
             const taxableAmount = planPrice + devicePrice + takeBackCredit / 24;
 
             // Taxes
-            let gst = 0, qst = 0, hst = 0;
+            let gst = 0;
+            let qst = 0;
+            let hst = 0;
 
             if (planProvince === 'qc') {
-                gst += taxableAmount * gstRateQuebec;
-                qst += taxableAmount * qstRateQuebec;
+                gst += taxableAmount * gstRate;
+                qst += taxableAmount * qstRate;
             } else if (planProvince === 'on') {
-                hst += taxableAmount * hstRateOntario;
+                hst += taxableAmount * hstRate;
             }
 
             if (deviceProvince === 'qc') {
-                gst += taxableAmount * gstRateQuebec;
-                qst += taxableAmount * qstRateQuebec;
+                gst += taxableAmount * gstRate;
+                qst += taxableAmount * qstRate;
             } else if (deviceProvince === 'on') {
-                hst += taxableAmount * hstRateOntario;
+                hst += taxableAmount * hstRate;
             }
 
-            const totalTaxes = gst + qst + hst;
-
             // Total
+            const totalTaxes = gst + qst + hst;
             const total = subtotal + totalTaxes;
 
             // Show results
