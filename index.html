@@ -41,25 +41,29 @@
                 </select>
             </div>
 
+            <!-- Take-back Credit -->
             <div>
                 <label for="takeBackCredit" class="block text-gray-700 font-medium">Take-back credit:</label>
                 <input type="number" id="takeBackCredit" step="0.01" required
                     class="w-full border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
 
-            <!-- Button -->
+            <!-- Calculate Button -->
             <div class="flex justify-center mt-6">
-                <a href="#_" onclick="calculateTaxes()" 
+                <button type="button" onclick="calculateTaxes()" 
                     class="relative inline-flex items-center justify-center w-full max-w-md p-4 px-6 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out border-2 border-purple-500 rounded-full shadow-md group">
                     <span class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-purple-500 group-hover:translate-x-0 ease">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
                     </span>
                     <span class="absolute flex items-center justify-center w-full h-full text-purple-500 transition-all duration-300 transform group-hover:translate-x-full ease">Calculate Taxes</span>
                     <span class="relative invisible">Calculate Taxes</span>
-                </a>
+                </button>
             </div>
         </form>
 
+        <!-- Results Section -->
         <div class="result hidden mt-6 bg-gray-50 p-4 rounded-lg shadow-md" id="resultSection">
             <h2 class="text-xl font-semibold text-gray-700 mb-4">Results</h2>
             <p class="text-gray-700"><strong>Subtotal:</strong> <span id="subtotal">-</span></p>
@@ -78,14 +82,13 @@
         Made by <a href="https://www.linkedin.com/in/aziz-ozan-azizoglu/" target="_blank" class="font-semibold text-purple-600 hover:underline">Ozan Azizoğlu</a>
     </footer>
 
+    <!-- Script for Calculations -->
     <script>
         function calculateTaxes() {
-            // Tax rates
             const gstRate = 0.05; // GST
             const qstRate = 0.09975; // QST
             const hstRate = 0.13; // HST
 
-            // Input values
             const planPrice = parseFloat(document.getElementById('planPrice').value);
             const devicePrice = parseFloat(document.getElementById('devicePrice').value);
             const takeBackCredit = parseFloat(document.getElementById('takeBackCredit').value);
@@ -101,40 +104,31 @@
             const subtotal = planPrice + devicePrice;
 
             // Taxable Amount
-            const taxableAmount = planPrice + devicePrice + takeBackCredit / 24;
+            const taxableAmount = subtotal + takeBackCredit / 24;
 
             // Taxes
-            let gst = 0;
-            let qst = 0;
-            let hst = 0;
+            let gst = 0, qst = 0, hst = 0;
 
-            if (planProvince === 'qc') {
-                gst += taxableAmount * gstRate;
-                qst += taxableAmount * qstRate;
-            } else if (planProvince === 'on') {
-                hst += taxableAmount * hstRate;
-            }
-
-            if (deviceProvince === 'qc') {
-                gst += taxableAmount * gstRate;
-                qst += taxableAmount * qstRate;
-            } else if (deviceProvince === 'on') {
-                hst += taxableAmount * hstRate;
+            if (planProvince === 'qc' || deviceProvince === 'qc') {
+                gst = taxableAmount * gstRate;
+                qst = taxableAmount * qstRate;
+            } 
+            if (planProvince === 'on' || deviceProvince === 'on') {
+                hst = taxableAmount * hstRate;
             }
 
             // Total
             const totalTaxes = gst + qst + hst;
             const total = subtotal + totalTaxes;
 
-            // Show results
-            const resultSection = document.getElementById('resultSection');
-            resultSection.classList.remove('hidden');
-
+            // Update Results
             document.getElementById('subtotal').textContent = subtotal.toFixed(2);
             document.getElementById('gst').textContent = gst.toFixed(2);
             document.getElementById('qst').textContent = qst.toFixed(2);
             document.getElementById('hst').textContent = hst.toFixed(2);
             document.getElementById('total').textContent = total.toFixed(2);
+
+            document.getElementById('resultSection').classList.remove('hidden');
         }
     </script>
 </body>
